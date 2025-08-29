@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    /* Updated color tokens for modern black-blue theme with high contrast text */
+    --background: 0 0% 0%; /* Pure black background */
+    --foreground: 0 0% 100%; /* Pure white text */
+    --card: 220 13% 12%; /* Dark gray cards */
+    --card-foreground: 0 0% 100%; /* White text on cards */
+    --popover: 221 83% 23%; /* Dark blue popovers */
+    --popover-foreground: 0 0% 100%; /* White text on popovers */
+    --primary: 221 83% 23%; /* Dark blue primary */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --secondary: 217 91% 60%; /* Accent blue secondary */
+    --secondary-foreground: 0 0% 100%; /* White text on secondary */
+    --muted: 220 13% 22%; /* Muted backgrounds */
+    --muted-foreground: 0 0% 100%; /* White muted text */
+    --accent: 217 91% 60%; /* Bright blue accent */
+    --accent-foreground: 0 0% 100%; /* White text on accent */
+    --destructive: 0 84% 60%; /* Red for destructive actions */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive */
+    --border: 220 13% 22%; /* Dark gray borders */
+    --input: 220 13% 12%; /* Dark input backgrounds */
+    --ring: 217 91% 60%; /* Blue focus rings */
+    --chart-1: 217 91% 60%; /* Chart color 1 - blue */
+    --chart-2: 221 83% 23%; /* Chart color 2 - dark blue */
+    --chart-3: 0 0% 0%; /* Chart color 3 - black */
+    --chart-4: 0 0% 100%; /* Chart color 4 - white */
+    --chart-5: 220 13% 22%; /* Chart color 5 - gray */
+    --radius: 0.5rem;
+    --sidebar-background: 220 13% 12%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 221 83% 23%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 91% 60%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 13% 22%;
+    --sidebar-ring: 217 91% 60%;
+  }
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 220 13% 12%;
+    --card-foreground: 0 0% 100%;
+    --popover: 221 83% 23%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 221 83% 23%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 13% 22%;
+    --muted-foreground: 0 0% 100%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 22%;
+    --input: 220 13% 12%;
+    --ring: 217 91% 60%;
+    --chart-1: 217 91% 60%;
+    --chart-2: 221 83% 23%;
+    --chart-3: 0 0% 0%;
+    --chart-4: 0 0% 100%;
+    --chart-5: 220 13% 22%;
+    --sidebar-background: 220 13% 12%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 221 83% 23%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 91% 60%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 13% 22%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Added glassmorphism and gradient effects for black-blue theme */
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-xl bg-card/90 border border-border/60;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--background)) 0%,
+      hsl(221 83% 23% / 0.3) 50%,
+      hsl(217 91% 60% / 0.2) 100%
+    );
+  }
+
+  .hero-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--background)) 0%,
+      hsl(221 83% 23% / 0.4) 30%,
+      hsl(217 91% 60% / 0.3) 70%,
+      hsl(var(--background)) 100%
+    );
+  }
+
+  .blue-gradient {
+    background: linear-gradient(135deg, hsl(221 83% 23%) 0%, hsl(217 91% 60%) 100%);
+  }
+}
