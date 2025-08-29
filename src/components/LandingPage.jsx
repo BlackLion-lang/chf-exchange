@@ -142,7 +142,7 @@ export default function LandingPage() {
         </div>
 
         <p className="text-sm sm:text-base text-foreground/80 mb-4 sm:mb-6 max-w-2xl mx-auto text-pretty">
-          Trade CHF.CH with BNB and USDT. Backed by Swiss precision, stability, and regulatory compliance.
+          Trade CHF.CH with BNB USDT. Backed by Swiss precision, stability, and regulatory compliance.
         </p>
 
         <div className="grid grid-cols-2 gap-2 sm:gap-3 max-w-sm sm:max-w-md mx-auto">
