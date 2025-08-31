@@ -19,8 +19,6 @@ export default function CHFExchange() {
               it can use AppKit (wagmi) hooks internally */}
           <LandingPage isPack={isPack}/>
 
-
-
           <Footer isPack={isPack}/>
         </div>
       </AppKitProvider>

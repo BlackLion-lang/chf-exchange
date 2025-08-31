@@ -2,23 +2,23 @@
 	{
 		"inputs": [
 			{
-				"internalType": "contract CHFToken",
-				"name": "chf_",
+				"internalType": "address",
+				"name": "initialOwner",
 				"type": "address"
-			},
-			{
-				"internalType": "contract IERC20",
-				"name": "usdt_",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "initialUsdtRateWei",
-				"type": "uint256"
 			},
 			{
 				"internalType": "address",
-				"name": "initialOwner",
+				"name": "_usdt",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_chfch",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_priceFeed",
 				"type": "address"
 			}
 		],
@@ -48,42 +48,6 @@
 		"type": "error"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "token",
-				"type": "address"
-			}
-		],
-		"name": "SafeERC20FailedOperation",
-		"type": "error"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "buyer",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "usdtAmount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "chfMinted",
-				"type": "uint256"
-			}
-		],
-		"name": "BoughtWithUSDT",
-		"type": "event"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -103,44 +67,52 @@
 		"type": "event"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "usdtRateWei",
-				"type": "uint256"
-			}
-		],
-		"name": "RateUpdated",
-		"type": "event"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
 				"name": "usdtAmount",
 				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "minChfOut",
-				"type": "uint256"
 			}
 		],
-		"name": "buyWithUSDT",
+		"name": "buy",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "chf",
+		"name": "chfch",
 		"outputs": [
 			{
-				"internalType": "contract CHFToken",
+				"internalType": "contract ICHFCH",
 				"name": "",
 				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "feeBP",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getCHFUSDPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -161,6 +133,19 @@
 	},
 	{
 		"inputs": [],
+		"name": "priceFeed",
+		"outputs": [
+			{
+				"internalType": "contract IPriceFeed",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "renounceOwnership",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -170,11 +155,11 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "newUsdtRateWei",
+				"name": "chfAmount",
 				"type": "uint256"
 			}
 		],
-		"name": "setRate",
+		"name": "sell",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -206,32 +191,27 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "usdtRateWei",
-		"outputs": [
+		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "withdrawCHFCH",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
 				"internalType": "uint256",
-				"name": "usdtAmount",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
-		"name": "withdraw",
+		"name": "withdrawUSDT",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
