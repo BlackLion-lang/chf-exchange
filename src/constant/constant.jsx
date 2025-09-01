@@ -5,7 +5,7 @@ import USDTABI from './USDT.json'
 // Contract addresses
 export const CONTRACTS = {
 
-  chfBuyContract_ADDRESS: '0xdd12699eb357ae465af96ac65a69a88e31758727',
+  chfBuyContract_ADDRESS: '0x73a2fb9905139672dac810dff6404bcb0f0951f1',
   chfToken_ADDRESS: '0x0ea39e4e5307c89d31b95021705fdd143df79c88',
   USDT_ADDRESS: '0x941a152505b7d6e70abf0bb742b14e61ac2f894c'
 };

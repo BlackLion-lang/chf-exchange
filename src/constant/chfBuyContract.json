@@ -53,6 +53,31 @@
 			{
 				"indexed": true,
 				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "usdtSpent",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "chfReceived",
+				"type": "uint256"
+			}
+		],
+		"name": "Bought",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
 				"name": "previousOwner",
 				"type": "address"
 			},
@@ -64,6 +89,31 @@
 			}
 		],
 		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "chfSpent",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "usdtReceived",
+				"type": "uint256"
+			}
+		],
+		"name": "Sold",
 		"type": "event"
 	},
 	{
@@ -84,7 +134,7 @@
 		"name": "chfch",
 		"outputs": [
 			{
-				"internalType": "contract ICHFCH",
+				"internalType": "contract CHFCH",
 				"name": "",
 				"type": "address"
 			}
@@ -94,7 +144,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "feeBP",
+		"name": "getCHFUSDPrice",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -106,8 +156,33 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getCHFUSDPrice",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "usdtAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "getExpectedCHF",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "chfAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "getExpectedUSDT",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -198,7 +273,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "withdrawCHFCH",
+		"name": "withdrawCHF",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

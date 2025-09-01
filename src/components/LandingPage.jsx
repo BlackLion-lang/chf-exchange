@@ -60,6 +60,7 @@ export default function LandingPage() {
   }
 
   const handleBuy = async () => {
+    if (!amount) return
     await write({
       address: CONTRACTS.chfBuyContract_ADDRESS,
       abi: ABIS.chfBuyContract,
@@ -225,7 +226,7 @@ export default function LandingPage() {
           )}
         </div>
       ) : (
-        <p className="text-center text-gray-400">Please connect wallet above</p>
+        <div className="text-center text-gray-400">Please connect wallet above</div>
       )}
     </div>
   )
