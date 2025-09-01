@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { useAccount, useReadContract, useWriteContract } from "wagmi"
-import { CONTRACTS, ABIS, DECIMAL } from "../constant/constant"
+import { CONTRACTS, ABIS } from "../constant/constant"
 import { Button } from "./ui/button"
 import { formatUnits, parseUnits } from "viem"
+import CreditCardPayment from "../../components/CreditCardPayment"
+import PaymentSuccess from "../../components/PaymentSuccess"
 
 export default function LandingPage() {
   const { address, isConnected } = useAccount()
@@ -12,6 +14,10 @@ export default function LandingPage() {
   const [mode, setMode] = useState("buy") // "buy" or "sell"
   const [balanceUSDT, setBalanceUSDT] = useState("0")
   const [balanceCHF, setBalanceCHF] = useState("0")
+  const [showPayment, setShowPayment] = useState(false)
+  const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [purchasedTokens, setPurchasedTokens] = useState("")
+  const [paymentError, setPaymentError] = useState("")
   const slippagePercent = 1 // 1% slippage
 
   // --- Read balances ---
@@ -43,7 +49,7 @@ export default function LandingPage() {
 
   // --- Calculate minOut for slippage ---
   const calculateMinOut = (amt) => {
-    const num = parseFloat(amt)
+    const num = Number.parseFloat(amt)
     const minOut = num * (1 - slippagePercent / 100)
     return minOut.toString()
   }
@@ -60,7 +66,6 @@ export default function LandingPage() {
   }
 
   const handleBuy = async () => {
-    if (!amount) return
     await write({
       address: CONTRACTS.chfBuyContract_ADDRESS,
       abi: ABIS.chfBuyContract,
@@ -87,6 +92,52 @@ export default function LandingPage() {
       functionName: "sell",
       args: [parseUnits(amount, 18)], // CHFCH amount
     })
+  }
+
+  const handleEuroPayment = () => {
+    if (!amount) return
+    setPaymentError("")
+    setShowPayment(true)
+  }
+
+  const handlePaymentSuccess = (tokenAmount) => {
+    setPurchasedTokens(tokenAmount)
+    setPaymentSuccess(true)
+    setShowPayment(false)
+  }
+
+  const handlePaymentError = (error) => {
+    setPaymentError(error)
+    setShowPayment(false)
+  }
+
+  const handleContinueTrading = () => {
+    setPaymentSuccess(false)
+    setAmount("")
+    setPurchasedTokens("")
+    setPaymentError("")
+  }
+
+  if (paymentSuccess) {
+    return (
+      <div className="max-w-screen-lg mx-auto bg-black/40 rounded-2xl shadow-lg p-6">
+        <PaymentSuccess tokenAmount={purchasedTokens} onContinue={handleContinueTrading} />
+      </div>
+    )
+  }
+
+  if (showPayment && mode === "buyWithEuro") {
+    return (
+      <div className="max-w-screen-lg mx-auto bg-black/40 rounded-2xl shadow-lg p-6 space-y-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold">Complete Your Purchase</h2>
+          <Button variant="outline" onClick={() => setShowPayment(false)} className="text-sm">
+            Back to Exchange
+          </Button>
+        </div>
+        <CreditCardPayment amount={amount} onSuccess={handlePaymentSuccess} onError={handlePaymentError} />
+      </div>
+    )
   }
 
   return (
@@ -143,13 +194,7 @@ export default function LandingPage() {
 
       <div>
         <label className="text-sm text-gray-300">
-          From (
-          {mode === "buy"
-            ? "USDT"
-            : mode === "buyWithEuro"
-              ? "EURO"
-              : "CHF"}
-          )
+          From ({mode === "buy" ? "USDT" : mode === "buyWithEuro" ? "EURO" : "CHF"})
         </label>
         <input
           type="number"
@@ -159,74 +204,61 @@ export default function LandingPage() {
           className="w-full p-3 rounded-lg bg-gray-800 text-white mt-1"
         />
         <p className="text-xs text-gray-400 mt-1">
-          Balance:{" "}
-          {mode === "buy"
-            ? balanceUSDT
-            : mode === "buyWithEuro"
-              ? balanceUSDT
-              : balanceCHF}{" "}
-          {mode === "buy"
-            ? "USDT"
-            : mode === "buyWithEuro"
-              ? "EURO"
-              : "CHF"}
+          Balance: {mode === "buy" ? balanceUSDT : mode === "buyWithEuro" ? balanceUSDT : balanceCHF}{" "}
+          {mode === "buy" ? "USDT" : mode === "buyWithEuro" ? "EURO" : "CHF"}
         </p>
       </div>
 
       <div>
-        <label className="text-sm text-gray-300">
-          To ({mode === "sell" ? "USDT" : "CHF"})
-        </label>
-        <input
-          type="text"
-          disabled
-          value={amount}
-          className="w-full p-3 rounded-lg bg-gray-800 text-gray-400 mt-1"
-        />
+        <label className="text-sm text-gray-300">To ({mode === "sell" ? "USDT" : "CHF"})</label>
+        <input type="text" disabled value={amount} className="w-full p-3 rounded-lg bg-gray-800 text-gray-400 mt-1" />
         <p className="text-xs text-gray-400 mt-1">
-          Balance:{" "}
-          {mode === "sell"
-            ? balanceUSDT
-            : balanceCHF}{" "}
-          {mode === "sell" ? "USDT" : "CHF"}
+          Balance: {mode === "sell" ? balanceUSDT : balanceCHF} {mode === "sell" ? "USDT" : "CHF"}
         </p>
       </div>
+
+      {paymentError && (
+        <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-4">
+          <p className="text-red-400 text-sm">{paymentError}</p>
+        </div>
+      )}
 
       {isConnected ? (
         <div className="flex gap-3">
           {mode === "buy" && (
             <>
-              <Button onClick={handleApproveBuy} className="w-1/2 bg-blue-600 hover:bg-blue-500">
+              <Button onClick={handleApproveBuy} className="w-1/2 bg-blue-600 hover:bg-blue-500" disabled={!amount || Number.parseFloat(amount) <= 0} >
                 Approve USDT
               </Button>
-              <Button onClick={handleBuy} className="w-1/2 bg-blue-600 hover:bg-blue-500">
+              <Button onClick={handleBuy} className="w-1/2 bg-blue-600 hover:bg-blue-500" disabled={!amount || Number.parseFloat(amount) <= 0}>
                 Buy CHF
               </Button>
             </>
           )}
           {mode === "buyWithEuro" && (
             <>
-              <Button onClick={handleApproveBuy} className="w-1/2 bg-green-600 hover:bg-green-500">
-                Approve EURO
-              </Button>
-              <Button onClick={handleBuy} className="w-1/2 bg-green-600 hover:bg-green-500">
-                Buy CHF
+              <Button
+                onClick={handleEuroPayment}
+                className="w-full bg-green-600 hover:bg-green-500"
+                disabled={!amount || Number.parseFloat(amount) <= 0}
+              >
+                Pay with Credit Card
               </Button>
             </>
           )}
           {mode === "sell" && (
             <>
-              <Button onClick={handleApproveSell} className="w-1/2 bg-red-600 hover:bg-red-500">
+              <Button onClick={handleApproveSell} className="w-1/2 bg-red-600 hover:bg-red-500" disabled={!amount || Number.parseFloat(amount) <= 0}>
                 Approve CHF
               </Button>
-              <Button onClick={handleSell} className="w-1/2 bg-red-600 hover:bg-red-500">
+              <Button onClick={handleSell} className="w-1/2 bg-red-600 hover:bg-red-500" disabled={!amount || Number.parseFloat(amount) <= 0}>
                 Sell CHF
               </Button>
             </>
           )}
         </div>
       ) : (
-        <div className="text-center text-gray-400">Please connect wallet above</div>
+        <p className="text-center text-gray-400">Please connect wallet above</p>
       )}
     </div>
   )
